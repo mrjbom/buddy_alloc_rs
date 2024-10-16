@@ -52,12 +52,19 @@ fn main() {
 
     // No std
     librs_file
-        .write("#![no_std]".as_ref())
+        .write("#![no_std]\n".as_ref())
         .expect("Failed to write to lib.rs");
+
     // Disable all warnings in lib.rs
     librs_file
-        .write("#![allow(warnings)]\n".as_ref())
+        .write("#![allow(warnings)]\n\n".as_ref())
         .expect("Failed to write to lib.rs");
+
+    // Comment
+    librs_file
+        .write("// Bindgen FFI binding to buddy_alloc\n\n".as_ref())
+        .expect("Failed to write to lib.rs");
+
     // Write binding content
     librs_file
         .write(bindings_content.as_ref())

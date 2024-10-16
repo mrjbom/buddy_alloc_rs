@@ -1,24 +1,30 @@
+/// Example
+use buddy_alloc::BuddyAlloc;
+
 fn main() {
     unsafe {
-        let buddy_metadata_size = buddy_alloc::BuddyAlloc::sizeof_alignment(16384, 4096).unwrap();
+        // Prepare metadata memory and arena
+        let arena_size = 65536;
+        let buddy_metadata_size = BuddyAlloc::sizeof(arena_size).expect("Wrong arena size");
         let mut buddy_metadata = vec![0u8; buddy_metadata_size];
+        let mut buddy_arena = vec![0u8; arena_size];
 
-        let buddy_allocator = buddy_alloc::BuddyAlloc::init_alignment(
+        // Create allocator
+        let buddy_allocator = BuddyAlloc::init(
             buddy_metadata.as_mut_ptr(),
-            0x1000 as *mut u8,
-            16384,
-            4096,
+            buddy_arena.as_mut_ptr(),
+            arena_size,
         )
-        .unwrap();
+        .expect("Failed to create allocator");
 
-        println!("{:p}", buddy_allocator.malloc(4096));
-        //println!("{:p}", buddy_allocator.malloc(8192));
-        buddy_allocator.walk(
-            &mut |_ctx, addr, slot_size, allocated| {
-                println!("{addr:p}, {slot_size}, {allocated}");
-                0 as *mut u8
-            },
-            0 as *mut u8,
-        );
+        // Allocate using the buddy allocator
+        let data: *mut u8 = buddy_allocator.malloc(2048);
+        // Free using the buddy allocator
+        buddy_allocator.free(data);
+
+        // Or using buddy_alloc_sys FFI binding
+        let data: *mut core::ffi::c_void =
+            buddy_alloc_sys::buddy_malloc(buddy_allocator.buddy_ptr, 2048);
+        buddy_alloc_sys::buddy_free(buddy_allocator.buddy_ptr, data);
     }
 }

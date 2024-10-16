@@ -1,9 +1,12 @@
 #![no_std]
-/// Rust-style binding to buddy_alloc
+
+// Rust-style binding to buddy_alloc
+
 use core::ffi::c_void;
 
 /// Buddy allocator
 pub struct BuddyAlloc {
+    /// Used by buddy_alloc-sys functions
     pub buddy_ptr: *mut buddy_alloc_sys::buddy,
 }
 
@@ -266,6 +269,8 @@ impl BuddyAlloc {
     /// is returned to called. NULL is returned upon completing iteration without stopping.
     ///
     /// The iteration order is implementation-defined and may change between versions.
+    ///
+    /// Parameters in closure: `ctx, addr, slot_size, allocated`
     /// # Example
     /// ```ignore
     /// buddy_allocator.walk(
