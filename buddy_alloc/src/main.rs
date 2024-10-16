@@ -1,5 +1,6 @@
 /// Example
 use buddy_alloc::BuddyAlloc;
+use buddy_alloc::buddy_alloc_sys;
 
 fn main() {
     unsafe {

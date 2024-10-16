@@ -13,6 +13,7 @@ And use `buddy_alloc` wrapper or `buddy_alloc_sys` binding
 
 ```
 use buddy_alloc::BuddyAlloc;
+use buddy_alloc::buddy_alloc_sys;
 
 fn main() {
     unsafe {
