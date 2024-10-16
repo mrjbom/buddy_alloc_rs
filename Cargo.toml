@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "buddy_alloc",
+    "buddy_alloc_sys",
+]
+resolver = "2"

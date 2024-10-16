@@ -1,0 +1,7 @@
+[package]
+name = "buddy_alloc"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+buddy_alloc_sys = { path = "../buddy_alloc_sys" }
