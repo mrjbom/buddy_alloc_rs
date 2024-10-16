@@ -9,7 +9,7 @@ For 1.2.0 buddy_alloc version, no_std.
 Add `buddy_alloc = { git = "https://github.com/mrjbom/buddy_alloc_rs.git" }` to dependencies  
 You may need Clang for the build [(bindgen requirements)](https://rust-lang.github.io/rust-bindgen/requirements.html)
 
-And use buddy_alloc wrapper or buddy_alloc_sys binding
+And use `buddy_alloc` wrapper or `buddy_alloc_sys` binding
 
 ```
 use buddy_alloc::BuddyAlloc;
