@@ -2,6 +2,8 @@
 
 // Rust-style binding to buddy_alloc
 
+pub use buddy_alloc_sys;
+
 use core::ffi::c_void;
 
 /// Buddy allocator
