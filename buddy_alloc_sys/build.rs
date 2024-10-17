@@ -29,6 +29,7 @@ fn main() {
     build
         .file(&buddy_alloc_c_file_path)
         .define("BUDDY_ALLOC_IMPLEMENTATION", None)
+        // Freestanding flags
         // GCC and Clang
         .flag_if_supported("-ffreestanding")
         .flag_if_supported("-fno-builtin")
