@@ -25,9 +25,26 @@ fn main() {
     .expect("Failed to write buddy_alloc.c file");
 
     // Compile .c file
-    cc::Build::new()
+    let mut build = cc::Build::new();
+    build
         .file(&buddy_alloc_c_file_path)
         .define("BUDDY_ALLOC_IMPLEMENTATION", None)
+        // GCC and Clang
+        .flag_if_supported("-ffreestanding")
+        .flag_if_supported("-fno-builtin")
+        .flag_if_supported("-nostdlib")
+        .flag_if_supported("-nostartfiles")
+        .flag_if_supported("-nodefaultlibs")
+        .flag_if_supported("-fno-exceptions")
+        .flag_if_supported("-mno-red-zone")
+        .flag_if_supported("-fno-stack-protector")
+        // MSVC
+        .flag_if_supported("/NODEFAULTLIB")
+        .flag_if_supported("/ENTRY")
+        .flag_if_supported("/KERNEL")
+        .flag_if_supported("/GS")
+        .flag_if_supported("/EHs-c-")
+        .flag_if_supported("/Zl")
         .compile("buddy_alloc");
 
     // Generate binding and write to buffer
