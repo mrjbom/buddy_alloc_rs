@@ -20,8 +20,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <string.h>
-#include <sys/types.h>
+//#include <string.h>
+//#include <sys/types.h>
 #ifndef BUDDY_PRINTF
 #include <stdio.h>
 #endif

@@ -1,90 +1,43 @@
-use std::io::Write;
-use std::path::PathBuf;
-
-const BUDDY_ALLOC_HEADER_FILE_PATH: &str = "../buddy_alloc-1.2.0/buddy_alloc.h";
+use std::{env, path::Path};
 
 fn main() {
-    //println!("cargo:rerun-if-changed=buddy_alloc-1.2.0/buddy_alloc.h");
+    let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+    let buddy_alloc_folder = Path::new(&manifest_dir).join("buddy_alloc_1.2.0_x86_64-elf-gcc_freestanding");
+    println!("cargo:rustc-link-search=native={}", buddy_alloc_folder.display());
+    #[cfg(debug_assertions)]
+    println!("cargo:rustc-link-lib=static=buddy_alloc_1.2.0_debug");
+    #[cfg(not(debug_assertions))]
+    println!("cargo:rustc-link-lib=static=buddy_alloc_1.2.0_release");
 
-    // Link
-    println!("cargo:rustc-link-lib=static=buddy_alloc");
+    /*
+    // bindgen crate can't do this, but bindgen-cli can
+    // Looks like bindgen crate bug, lol
 
-    let buddy_alloc_header_file_path = PathBuf::from("../buddy_alloc-1.2.0/buddy_alloc.h");
-    if !buddy_alloc_header_file_path.exists() {
-        panic!("buddy_alloc.h not found!");
-    }
-    // Compilation
-    // cc don't compile .h file
-    // create copy with .c extension
-    let buddy_alloc_c_file_path = buddy_alloc_header_file_path.with_extension("c");
-    std::fs::write(
-        &buddy_alloc_c_file_path,
-        std::fs::read_to_string(buddy_alloc_header_file_path)
-            .expect("Failed to read buddy_alloc.h"),
-    )
-    .expect("Failed to write buddy_alloc.c file");
+    // Bindgen
+    // Clang will use gcc headers
+    let include_paths_string = env::var("CLANG_GCC_INCLUDE_PATH")
+        .expect(
+            concat!(
+                "CLANG_GCC_INCLUDE_PATH env variable not present\n",
+                "Example CLANG_GCC_INCLUDE_PATH=gcc_include_path1:gcc_include_path2"
+            )
+        );
+    let include_paths: Vec<&str> = include_paths_string.split(':').collect();
+    let include_paths_with_isystem: Vec<String> = include_paths.iter()
+        .map(|path| {
+            let mut s = String::from("-isystem ");
+            s.push_str(path);
+            s
+        })
+        .collect();
 
-    // Compile .c file
-    let mut build = cc::Build::new();
-    build
-        .file(&buddy_alloc_c_file_path)
-        .define("BUDDY_ALLOC_IMPLEMENTATION", None)
-        // Freestanding flags
-        // GCC and Clang
-        .flag_if_supported("-ffreestanding")
-        .flag_if_supported("-fno-builtin")
-        .flag_if_supported("-nostdlib")
-        .flag_if_supported("-nostartfiles")
-        .flag_if_supported("-nodefaultlibs")
-        .flag_if_supported("-fno-exceptions")
-        .flag_if_supported("-mno-red-zone")
-        .flag_if_supported("-fno-stack-protector")
-        // MSVC
-        .flag_if_supported("/NODEFAULTLIB")
-        .flag_if_supported("/ENTRY")
-        .flag_if_supported("/KERNEL")
-        .flag_if_supported("/GS")
-        .flag_if_supported("/EHs-c-")
-        .flag_if_supported("/Zl")
-        .compile("buddy_alloc");
+    let buddy_alloc_header_path = Path::new(&manifest_dir).join("buddy_alloc_1.2.0_x86_64-elf-gcc_freestanding").join("buddy_alloc_1.2.0.c.h");
+    let builder = bindgen::Builder::default()
+        .clang_args(["--target=x86_64-elf", "-ffreestanding", "-fno-builtin", "-nostdinc"])
+        .clang_args(&include_paths_with_isystem)
+        .header(buddy_alloc_header_path.display().to_string());
 
-    // Generate binding and write to buffer
-    let mut bindings_content = Vec::<u8>::new();
-    bindgen::Builder::default()
-        .header(BUDDY_ALLOC_HEADER_FILE_PATH)
-        .allowlist_item("buddy.*")
-        .allowlist_item("BUDDY.*")
-        .use_core() // No std
-        .generate()
-        .expect("Failed to generate binding")
-        .write(Box::new(&mut bindings_content))
-        .expect("Failed to write binding to buffer");
-
-    // Write binding content from buffer to lib.rs
-    // Disable warnings for lib.rs
-    let mut librs_file = std::fs::File::options()
-        .write(true)
-        .truncate(true)
-        .open("src/lib.rs")
-        .expect("Failed to open lib.rs");
-
-    // No std
-    librs_file
-        .write("#![no_std]\n".as_ref())
-        .expect("Failed to write to lib.rs");
-
-    // Disable all warnings in lib.rs
-    librs_file
-        .write("#![allow(warnings)]\n\n".as_ref())
-        .expect("Failed to write to lib.rs");
-
-    // Comment
-    librs_file
-        .write("// Bindgen FFI binding to buddy_alloc\n\n".as_ref())
-        .expect("Failed to write to lib.rs");
-
-    // Write binding content
-    librs_file
-        .write(bindings_content.as_ref())
-        .expect("Failed to write to lib.rs");
+    builder.generate()
+        .expect("Failed to generate binding");
+    */
 }
