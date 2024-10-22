@@ -8,9 +8,17 @@ use core::ffi::c_void;
 
 /// Buddy allocator
 pub struct BuddyAlloc {
-    /// Used by buddy_alloc-sys functions
+    /// Used by buddy_alloc_sys functions
+    ///
+    /// ### ATTENTION!
+    /// Accessing a pointer and buddy_alloc_sys functions in multithreaded code is unsafe!
     pub buddy_ptr: *mut buddy_alloc_sys::buddy,
 }
+
+/// It is necessary to be able to use the spin crate.
+///
+/// Despite this, BuddyAlloc itself is not type-safe.
+unsafe impl Sync for BuddyAlloc {}
 
 /// For [`BuddyAlloc::safe_free`]
 #[derive(Debug, Copy, Clone)]

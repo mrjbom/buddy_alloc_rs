@@ -2,8 +2,12 @@ use std::{env, path::Path};
 
 fn main() {
     let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
-    let buddy_alloc_folder = Path::new(&manifest_dir).join("buddy_alloc_1.2.0_x86_64-elf-gcc_freestanding");
-    println!("cargo:rustc-link-search=native={}", buddy_alloc_folder.display());
+    let buddy_alloc_folder =
+        Path::new(&manifest_dir).join("buddy_alloc_1.2.0_x86_64-elf-gcc_freestanding");
+    println!(
+        "cargo:rustc-link-search=native={}",
+        buddy_alloc_folder.display()
+    );
     #[cfg(debug_assertions)]
     println!("cargo:rustc-link-lib=static=buddy_alloc_1.2.0_debug");
     #[cfg(not(debug_assertions))]
