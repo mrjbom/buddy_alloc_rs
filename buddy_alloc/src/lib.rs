@@ -19,6 +19,7 @@ pub struct BuddyAlloc {
 ///
 /// Despite this, BuddyAlloc itself is not type-safe.
 unsafe impl Sync for BuddyAlloc {}
+unsafe impl Send for BuddyAlloc {}
 
 /// For [`BuddyAlloc::safe_free`]
 #[derive(Debug, Copy, Clone)]
