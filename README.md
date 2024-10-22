@@ -15,7 +15,6 @@ I didn't bother with automation because I plan to only occasionally update versi
 
 # How to use
 Add `buddy_alloc = { git = "https://github.com/mrjbom/buddy_alloc_rs.git" }` to dependencies  
-You may need Clang for the build [(bindgen requirements)](https://rust-lang.github.io/rust-bindgen/requirements.html)
 
 And use `buddy_alloc` wrapper or `buddy_alloc_sys` binding
 
