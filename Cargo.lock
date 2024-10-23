@@ -49,6 +49,16 @@ name = "buddy_alloc_sys"
 version = "1.2.0"
 dependencies = [
  "bindgen",
+ "cc",
+]
+
+[[package]]
+name = "cc"
+version = "1.1.31"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c2e7962b54006dcfcc61cb72735f4d89bb97061dd6a7ed882ec6b8ee53714c6f"
+dependencies = [
+ "shlex",
 ]
 
 [[package]]

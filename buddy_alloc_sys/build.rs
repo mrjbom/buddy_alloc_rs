@@ -8,10 +8,44 @@ fn main() {
         "cargo:rustc-link-search=native={}",
         buddy_alloc_folder.display()
     );
-    #[cfg(debug_assertions)]
-    println!("cargo:rustc-link-lib=static=buddy_alloc_1.2.0_debug");
-    #[cfg(not(debug_assertions))]
-    println!("cargo:rustc-link-lib=static=buddy_alloc_1.2.0_release");
+    #[cfg(all(target_arch = "x86_64", target_vendor = "unknown", target_os = "none"))]
+    {
+        #[cfg(debug_assertions)]
+        println!("cargo:rustc-link-lib=static=buddy_alloc_1.2.0_debug");
+        #[cfg(not(debug_assertions))]
+        println!("cargo:rustc-link-lib=static=buddy_alloc_1.2.0_release");
+    }
+    // For everything except the kernel, we try to compile and link library
+    // This may not work correctly with sys binding, since it is generated for the kernel, but technically it should work on any x86_64 Linux and Windows machine
+    #[cfg(not(all(target_arch = "x86_64", target_vendor = "unknown", target_os = "none")))]
+    {
+        let buddy_alloc_folder = Path::new(&manifest_dir).join("buddy_alloc_1.2.0_not_for_kernel");
+
+        cc::Build::new()
+            .file(
+                buddy_alloc_folder
+                    .join("buddy_alloc_1.2.0.c")
+                    .display()
+                    .to_string(),
+            )
+            .debug(true)
+            .compile("buddy_alloc_1.2.0_debug_not_for_kernel");
+
+        cc::Build::new()
+            .file(
+                buddy_alloc_folder
+                    .join("buddy_alloc_1.2.0.c")
+                    .display()
+                    .to_string(),
+            )
+            .debug(false)
+            .compile("buddy_alloc_1.2.0_release_not_for_kernel");
+
+        #[cfg(debug_assertions)]
+        println!("cargo:rustc-link-lib=static=buddy_alloc_1.2.0_debug_not_for_kernel");
+        #[cfg(not(debug_assertions))]
+        println!("cargo:rustc-link-lib=static=buddy_alloc_1.2.0_release_not_for_kernel");
+    }
 
     /*
     // bindgen crate can't do this, but bindgen-cli can
