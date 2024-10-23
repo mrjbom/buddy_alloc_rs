@@ -14,6 +14,7 @@ fn main() {
         println!("cargo:rustc-link-lib=static=buddy_alloc_1.2.0_debug");
         #[cfg(not(debug_assertions))]
         println!("cargo:rustc-link-lib=static=buddy_alloc_1.2.0_release");
+        println!("cargo:rustc-link-arg=-fno-stack-protector");
     }
     // For everything except the kernel, we try to compile and link library
     // This may not work correctly with sys binding, since it is generated for the kernel, but technically it should work on any x86_64 Linux and Windows machine
