@@ -4,10 +4,13 @@
 
 #define BUDDY_PRINTF(...)
 
+#define memset buddy_alloc_memset
+#define memmove buddy_alloc_memmove
+
 typedef long ssize_t;
 typedef unsigned long size_t;
 
-void* memset(void* dest, int val, size_t num)
+void* buddy_alloc_memset(void* dest, int val, size_t num)
 {
     unsigned char* ptr = dest;
     while (num-- > 0) {
@@ -16,7 +19,7 @@ void* memset(void* dest, int val, size_t num)
     return dest;
 }
 
-void* memmove(void* dest, const void* src, size_t num)
+void* buddy_alloc_memmove(void* dest, const void* src, size_t num)
 {
     char* d = dest;
     const char* s = src;
