@@ -8,13 +8,21 @@ https://newos.org/toolchains
 This is not something that everyone needs to do, this is a hint to me.
 
 #### buddy_alloc_1.2.0_debug.o
-`x86_64-elf-gcc -ffreestanding -mno-red-zone -lgcc -m64 -nostdlib -fpic -fno-builtin -fno-stack-protector -fno-omit-frame-pointer -g -Og -c buddy_alloc_1.2.0.c -o buddy_alloc_1.2.0_debug.o`
+```
+x86_64-elf-gcc -ffreestanding -mno-red-zone -lgcc -m64 -nostdlib -fpic -fno-builtin -fno-stack-protector -fno-omit-frame-pointer \
+    -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4 -mno-avx -mno-avx2 -mno-fma -msoft-float \
+    -g -Og -c buddy_alloc_1.2.0.c -o buddy_alloc_1.2.0_debug.o
+```
 
 #### libbuddy_alloc_1.2.0_debug.a
 `x86_64-elf-ar rcs libbuddy_alloc_1.2.0_debug.a buddy_alloc_1.2.0_debug.o`
 
 #### buddy_alloc_1.2.0_release.o
-`x86_64-elf-gcc -ffreestanding -mno-red-zone -lgcc -m64 -nostdlib -fpic -fno-builtin -fno-stack-protector -O3 -c buddy_alloc_1.2.0.c -o buddy_alloc_1.2.0_release.o`
+```
+x86_64-elf-gcc -ffreestanding -mno-red-zone -lgcc -m64 -nostdlib -fpic -fno-builtin -fno-stack-protector \
+    -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4 -mno-avx -mno-avx2 -mno-fma -msoft-float \
+    -O3 -c buddy_alloc_1.2.0.c -o buddy_alloc_1.2.0_release.o
+```
 
 #### libbuddy_alloc_1.2.0_release.a
 `x86_64-elf-ar rcs libbuddy_alloc_1.2.0_release.a buddy_alloc_1.2.0_release.o`
