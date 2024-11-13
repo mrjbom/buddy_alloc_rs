@@ -9,7 +9,7 @@ This is not something that everyone needs to do, this is a hint to me.
 
 #### buddy_alloc_1.2.0_debug.o
 ```
-x86_64-elf-gcc -ffreestanding -mno-red-zone -lgcc -m64 -nostdlib -fpic -fno-builtin -fno-stack-protector -fno-omit-frame-pointer \
+x86_64-elf-gcc -ffreestanding -mno-red-zone -lgcc -m64 -nostdlib -fpic -fno-builtin -fno-stack-protector -fno-omit-frame-pointer -mcmodel=large \
     -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4 -mno-avx -mno-avx2 -mno-fma -msoft-float \
     -g -Og -c buddy_alloc_1.2.0.c -o buddy_alloc_1.2.0_debug.o
 ```
@@ -19,7 +19,7 @@ x86_64-elf-gcc -ffreestanding -mno-red-zone -lgcc -m64 -nostdlib -fpic -fno-buil
 
 #### buddy_alloc_1.2.0_release.o
 ```
-x86_64-elf-gcc -ffreestanding -mno-red-zone -lgcc -m64 -nostdlib -fpic -fno-builtin -fno-stack-protector \
+x86_64-elf-gcc -ffreestanding -mno-red-zone -lgcc -m64 -nostdlib -fpic -fno-builtin -fno-stack-protector -mcmodel=large \
     -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4 -mno-avx -mno-avx2 -mno-fma -msoft-float \
     -O3 -c buddy_alloc_1.2.0.c -o buddy_alloc_1.2.0_release.o
 ```
