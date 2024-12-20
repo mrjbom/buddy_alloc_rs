@@ -15,9 +15,6 @@ pub struct BuddyAlloc {
     pub buddy_ptr: *mut buddy_alloc_sys::buddy,
 }
 
-/// It is necessary to be able to use the spin crate.
-///
-/// Despite this, BuddyAlloc itself is not type-safe.
 unsafe impl Sync for BuddyAlloc {}
 unsafe impl Send for BuddyAlloc {}
 
@@ -209,7 +206,7 @@ impl BuddyAlloc {
         .cast::<u8>()
     }
 
-    /// Realloc-like behavior that checks for overflow. See reallocarray
+    /// Realloc-like behavior that checks for overflow. See reallocarray.
     pub unsafe fn reallocarray(
         &self,
         ptr: *mut u8,
