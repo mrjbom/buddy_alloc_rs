@@ -7,9 +7,9 @@ The package contain binding generated using bindgen and wrapper that allows use 
 I did this only to use it for my needs, so it's unlikely that it will work for you.  
 Everything contained here is intended for use in the kernel, so x86_64-elf toolchain is used to compile the C code, and x86_64-unknown-none target is used for Rust code.
 
-Contains the compiled version of buddy_alloc 1.2.0, which is linked to the package and used by the kernel.
+Contains the compiled version of buddy_alloc 1.3.0, which is linked to the package and used by the kernel.
 
-The commands for compiling and generating the binding are [here](buddy_alloc_sys/buddy_alloc_1.2.0_x86_64-elf-gcc_freestanding/).  
+The commands for compiling and generating the binding are [here](buddy_alloc_sys/buddy_alloc_kernel/).  
 The execution of commands is not automated, care is required to make it all work.  
 I didn't bother with automation because I plan to only occasionally update versions with the release of buddy_alloc and I don't plan to make it available for everyone to use.
 
